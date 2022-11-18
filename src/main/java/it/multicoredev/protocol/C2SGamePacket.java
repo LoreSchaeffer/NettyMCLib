@@ -1,13 +1,11 @@
 package it.multicoredev.protocol;
 
+import io.netty.handler.codec.DecoderException;
 import it.multicoredev.mclib.network.PacketByteBuf;
-import it.multicoredev.mclib.network.exceptions.DecoderException;
 import it.multicoredev.mclib.network.exceptions.EncoderException;
 import it.multicoredev.mclib.network.exceptions.ProcessException;
 import it.multicoredev.mclib.network.protocol.Packet;
 import it.multicoredev.server.ServerPacketListener;
-
-import java.nio.charset.StandardCharsets;
 
 /**
  * BSD 3-Clause License
@@ -40,40 +38,40 @@ import java.nio.charset.StandardCharsets;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public class C2SMessagePacket implements Packet<ServerPacketListener> {
-    private String sender;
-    private String message;
+public class C2SGamePacket implements Packet<ServerPacketListener> {
+    private Game game;
 
-    public C2SMessagePacket(String sender, String message) {
-        this.sender = sender;
-        this.message = message;
+    public C2SGamePacket(Game game) {
+        this.game = game;
     }
 
-    public C2SMessagePacket() {
+    public C2SGamePacket() {
     }
 
     @Override
     public void encode(PacketByteBuf buf) throws EncoderException {
-        buf.writeString(sender);
-        buf.writeString(message);
+        try {
+            buf.writeObject(game);
+        } catch (Exception e) {
+            throw new EncoderException(e);
+        }
     }
 
     @Override
     public void decode(PacketByteBuf buf) throws DecoderException {
-        sender = buf.readString(StandardCharsets.UTF_8);
-        message = buf.readString();
+        try {
+            game = buf.readObject(Game.class);
+        } catch (Exception e) {
+            throw new DecoderException(e);
+        }
     }
 
     @Override
     public void processPacket(ServerPacketListener handler) throws ProcessException {
-        handler.handleMessagePacket(this);
+        handler.handleGamePacket(this);
     }
 
-    public String getSender() {
-        return sender;
-    }
-
-    public String getMessage() {
-        return message;
+    public Game getGame() {
+        return game;
     }
 }

@@ -1,14 +1,5 @@
 package it.multicoredev.protocol;
 
-import it.multicoredev.mclib.network.PacketByteBuf;
-import it.multicoredev.mclib.network.exceptions.DecoderException;
-import it.multicoredev.mclib.network.exceptions.EncoderException;
-import it.multicoredev.mclib.network.exceptions.ProcessException;
-import it.multicoredev.mclib.network.protocol.Packet;
-import it.multicoredev.server.ServerPacketListener;
-
-import java.nio.charset.StandardCharsets;
-
 /**
  * BSD 3-Clause License
  * <p>
@@ -40,40 +31,38 @@ import java.nio.charset.StandardCharsets;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public class C2SMessagePacket implements Packet<ServerPacketListener> {
-    private String sender;
-    private String message;
+public class Game {
+    private String name;
+    private String description;
+    private String version;
+    private String author;
+    private String website;
 
-    public C2SMessagePacket(String sender, String message) {
-        this.sender = sender;
-        this.message = message;
+    public Game(String name, String description, String version, String author, String website) {
+        this.name = name;
+        this.description = description;
+        this.version = version;
+        this.author = author;
+        this.website = website;
     }
 
-    public C2SMessagePacket() {
+    public String getName() {
+        return name;
     }
 
-    @Override
-    public void encode(PacketByteBuf buf) throws EncoderException {
-        buf.writeString(sender);
-        buf.writeString(message);
+    public String getDescription() {
+        return description;
     }
 
-    @Override
-    public void decode(PacketByteBuf buf) throws DecoderException {
-        sender = buf.readString(StandardCharsets.UTF_8);
-        message = buf.readString();
+    public String getVersion() {
+        return version;
     }
 
-    @Override
-    public void processPacket(ServerPacketListener handler) throws ProcessException {
-        handler.handleMessagePacket(this);
+    public String getAuthor() {
+        return author;
     }
 
-    public String getSender() {
-        return sender;
-    }
-
-    public String getMessage() {
-        return message;
+    public String getWebsite() {
+        return website;
     }
 }

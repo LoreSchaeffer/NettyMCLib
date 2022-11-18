@@ -1,6 +1,8 @@
 package it.multicoredev.server;
 
+import com.google.gson.Gson;
 import it.multicoredev.mclib.network.protocol.PacketListener;
+import it.multicoredev.protocol.C2SGamePacket;
 import it.multicoredev.protocol.C2SMessagePacket;
 
 /**
@@ -36,7 +38,11 @@ import it.multicoredev.protocol.C2SMessagePacket;
  */
 public class ServerPacketListener implements PacketListener {
 
-    public void handleMessagePacket(C2SMessagePacket c2SMessagePacket) {
-        System.out.println("IN: " + c2SMessagePacket.getSender() + ": " + c2SMessagePacket.getMessage());
+    public void handleMessagePacket(C2SMessagePacket packet) {
+        System.out.println("IN: " + packet.getSender() + ": " + packet.getMessage());
+    }
+
+    public void handleGamePacket(C2SGamePacket packet) {
+        System.out.println(new Gson().toJson(packet.getGame()));
     }
 }

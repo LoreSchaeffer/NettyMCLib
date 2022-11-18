@@ -3,7 +3,9 @@ package it.multicoredev.client;
 import it.multicoredev.mclib.network.client.ClientSocket;
 import it.multicoredev.mclib.network.client.ServerAddress;
 import it.multicoredev.mclib.network.protocol.PacketRegistry;
+import it.multicoredev.protocol.C2SGamePacket;
 import it.multicoredev.protocol.C2SMessagePacket;
+import it.multicoredev.protocol.Game;
 
 /**
  * BSD 3-Clause License
@@ -41,6 +43,7 @@ public class Client {
 
     private Client() {
         PacketRegistry.getInstance().registerPacket(C2SMessagePacket.class);
+        PacketRegistry.getInstance().registerPacket(C2SGamePacket.class);
 
         clientSocket = new ClientSocket(new ServerAddress("localhost", 12987), new ClientNetworkHandler(new ClientPacketListener()));
         new Thread(() -> {
@@ -54,14 +57,15 @@ public class Client {
         for (int i = 0; i < 500; i++) {
             try {
                 System.out.println("Sending message " + i);
-                clientSocket.sendPacket(new C2SMessagePacket("Client", "Hello world! " + i));
+                //clientSocket.sendPacket(new C2SMessagePacket("Client", "Hello world! " + i));
+                clientSocket.sendPacket(new C2SGamePacket(new Game("Game " + i, "Game description " + i, "1.0." + i, "LoreSchaeffer", "https://multicore.network/game" + i)));
             } catch (Throwable t) {
                 i--;
                 System.out.println(t.getMessage());
             }
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

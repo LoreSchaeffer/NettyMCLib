@@ -2,6 +2,7 @@ package it.multicoredev.server;
 
 import it.multicoredev.mclib.network.protocol.PacketRegistry;
 import it.multicoredev.mclib.network.server.ServerSocket;
+import it.multicoredev.protocol.C2SGamePacket;
 import it.multicoredev.protocol.C2SMessagePacket;
 
 /**
@@ -41,6 +42,7 @@ public class Server {
 
     private Server() {
         PacketRegistry.getInstance().registerPacket(C2SMessagePacket.class);
+        PacketRegistry.getInstance().registerPacket(C2SGamePacket.class);
 
         serverPacketListener = new ServerPacketListener();
 
